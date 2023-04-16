@@ -4,8 +4,8 @@ import { domService } from "../domService";
 import { truncateService } from "../truncateService";
 
 export interface IuseTruncateProps {
-  containerElement: HTMLElement | null;
-  mainElement: HTMLElement | null;
+  truncateElement: HTMLElement | null;
+  textElement: HTMLElement | null;
   suffixElement: HTMLElement | null;
   delimiter?: string;
   onComplete?: (value: string, htmlContent?: string) => void;
@@ -19,8 +19,8 @@ export interface IStartTruncationProps {
 }
 
 export const useTruncate = ({
-  containerElement,
-  mainElement,
+  truncateElement,
+  textElement,
   suffixElement,
   delimiter = " ",
   onComplete,
@@ -71,8 +71,8 @@ export const useTruncate = ({
 
   React.useEffect(() => {
     if (
-      isEmpty(containerElement) ||
-      isEmpty(mainElement) ||
+      isEmpty(truncateElement) ||
+      isEmpty(textElement) ||
       isEmpty(suffixElement)
     ) {
       return;
@@ -81,10 +81,10 @@ export const useTruncate = ({
     console.count("useEffect startTruncation");
 
     const abortController = new AbortController();
-    const maxHeight = containerElement.offsetHeight;
+    const maxHeight = truncateElement.offsetHeight;
 
     startTruncation({
-      elements: [containerElement, mainElement, suffixElement],
+      elements: [truncateElement, textElement, suffixElement],
       maxHeight,
       onComplete,
       signal: abortController.signal,
@@ -95,8 +95,8 @@ export const useTruncate = ({
       abortController.abort();
     };
   }, [
-    containerElement,
-    mainElement,
+    truncateElement,
+    textElement,
     suffixElement,
     onComplete,
     // mainDimension,

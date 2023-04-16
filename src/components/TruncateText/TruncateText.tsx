@@ -21,9 +21,9 @@ export interface IStartTruncationProps {
 export const TruncateText: React.FC<ITruncateTextProps> = React.memo(
   ({ text, delimiter, suffix = "...", sx }) => {
     const [isTruncating, setIsTruncating] = React.useState(true);
-    const [containerElement, setContainerElement] =
+    const [truncateElement, setTruncateElement] =
       React.useState<HTMLElement | null>(null);
-    const [mainElement, setMainElement] = React.useState<HTMLElement | null>(
+    const [textElement, setTextElement] = React.useState<HTMLElement | null>(
       null
     );
     const [suffixElement, setSuffixElement] =
@@ -44,8 +44,8 @@ export const TruncateText: React.FC<ITruncateTextProps> = React.memo(
     );
 
     useTruncate({
-      containerElement,
-      mainElement,
+      truncateElement,
+      textElement,
       suffixElement,
       delimiter,
       onComplete: handleTruncateComplete,
@@ -66,14 +66,14 @@ export const TruncateText: React.FC<ITruncateTextProps> = React.memo(
       <>
         {isTruncating && (
           <Box
-            ref={setContainerElement}
+            ref={setTruncateElement}
             sx={[
               ContainerSx,
               ...(Array.isArray(sx) ? (sx as any) : [sx]),
               NoClickSx,
             ]}
           >
-            <Box component="span" ref={setMainElement}>
+            <Box component="span" ref={setTextElement}>
               {text}
             </Box>
             <Box component="span" ref={setSuffixElement}>
@@ -84,7 +84,7 @@ export const TruncateText: React.FC<ITruncateTextProps> = React.memo(
 
         {!isTruncating && (
           <Box
-            ref={setContainerElement}
+            ref={setTruncateElement}
             sx={[ContainerSx, ...(Array.isArray(sx) ? (sx as any) : [sx])]}
             dangerouslySetInnerHTML={{
               __html: htmlContent,

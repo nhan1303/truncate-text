@@ -4,11 +4,11 @@ export const truncateService = {
     maxHeight: number,
     delimiter: string
   ): string {
-    const [containerElement, mainElement, suffixElement] = elements;
-    const originalText = mainElement.textContent || "";
+    const [truncateElement, textElement, suffixElement] = elements;
+    const originalText = textElement.textContent || "";
 
     // render mimic TruncateText element
-    document.body.appendChild(containerElement);
+    document.body.appendChild(truncateElement);
 
     // prepares necessary styles to truncation
     const styles = [
@@ -21,9 +21,9 @@ export const truncateService = {
       "opacity:0",
     ];
 
-    containerElement.style.cssText = styles.join(";");
+    truncateElement.style.cssText = styles.join(";");
 
-    if (containerElement.offsetHeight <= maxHeight) {
+    if (truncateElement.offsetHeight <= maxHeight) {
       return originalText;
     }
 
@@ -37,19 +37,19 @@ export const truncateService = {
       midpoint = (min + max + 1) >> 1;
       const testFitContent = words.slice(0, midpoint).join(delimiter);
 
-      mainElement.innerText = testFitContent;
-      containerElement.innerHTML =
-        mainElement.innerHTML + suffixElement.innerHTML;
+      textElement.innerText = testFitContent;
+      truncateElement.innerHTML =
+        textElement.innerHTML + suffixElement.innerHTML;
 
-      // re-check containerElement's dimension after update new test words
-      if (containerElement.offsetHeight > maxHeight) {
+      // re-check truncateElement's dimension after update new test words
+      if (truncateElement.offsetHeight > maxHeight) {
         max = midpoint - 1;
       } else {
         min = midpoint;
       }
     }
 
-    document.body.removeChild(containerElement);
+    document.body.removeChild(truncateElement);
     return words.slice(0, max).join(delimiter);
   },
 };
